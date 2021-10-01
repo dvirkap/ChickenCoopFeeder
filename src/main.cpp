@@ -10,11 +10,14 @@ The range readings are in units of mm. */
 
 VL53L0X sensor;
 
+//#define POINTSTOP1 = 100;
 void setup()
 {
   Serial.begin(9600);
   Wire.begin();
-
+  pinMode(2, OUTPUT); 
+  
+  
   sensor.setTimeout(500);
   if (!sensor.init())
   {
@@ -26,13 +29,20 @@ void setup()
   // fast as possible).  To use continuous timed mode
   // instead, provide a desired inter-measurement period in
   // ms (e.g. sensor.startContinuous(100)).
-  sensor.startContinuous(1000);
+  sensor.startContinuous(100);
 }
 
 void loop()
 {
+  int distanceLimit;
+  distanceLimit = 100;
+  if (sensor.readRangeContinuousMillimeters() < distanceLimit) {
   Serial.print(sensor.readRangeContinuousMillimeters());
-  if (sensor.timeoutOccurred()) { Serial.print(" TIMEOUT"); }
+  
+    if (sensor.timeoutOccurred()) { Serial.print(" TIMEOUT"); }
 
   Serial.println();
+  }
+  
 }
+//LOVE;
